@@ -32,9 +32,15 @@ function getComputerChoice() {
     console.log(computerChoice);
 }
 
+let computerSelection;
+
 //Play a single round of rock paper scissors.
-//Take player's selection
+//Compare player and computer's selection
+//Determine winner
 function playRound(playerSelection, computerSelection) {
+    computerSelection = getComputerChoice();
+    console.log(`The computer plays ${computerSelection}.`);
+
     switch(true) {
 
         case (playerSelection === 'rock' && computerSelection === 'rock'):
@@ -68,20 +74,20 @@ function playRound(playerSelection, computerSelection) {
 }
 
 const playerSelection = 'rock';
-const computerSelection = getComputerChoice();
+
 
 console.log(`And the players reveal their moves - Rock...Paper...Scissors!`);
-console.log(`You play ${playerSelection}.`);
-console.log(`The computer plays ${computerSelection}.`);
 
+//Play a game of 5 rounds
+function game(playerSelection, computerSelection) {
+    for (let i = 0; i < 5; i++) {
+        console.log(`Round ${i + 1}: `);
 
-console.log(playRound(playerSelection, computerSelection));
+        console.log(`You play ${playerSelection}.`);
+        
+        console.log(playRound(playerSelection, computerSelection));
+        // console.log(`Round ${i + 1} winner: `);
+    }
+}
 
-//Take computer's selection
-
-//Determine winner
-
-//Declare winner
-
-
-//Keep track of 5 rounds
+console.log(game(playerSelection, computerSelection));
