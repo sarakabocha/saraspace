@@ -29,7 +29,7 @@ function getComputerChoice() {
     console.log(computerChoice);
 }
 
-getComputerChoice;
+getComputerChoice();
 
 //Play a single round of rock paper scissors.
 //Take player's selection
