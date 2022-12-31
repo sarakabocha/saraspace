@@ -13,8 +13,6 @@ let computerChoice;
 function getComputerChoice() {
     let n = Math.random()
 
-    console.log(n);
-
     switch(true) {
 
         case n <= 0.33:
@@ -33,42 +31,55 @@ function getComputerChoice() {
 }
 
 let computerSelection;
+let playerScore = 0;
+let computerScore = 0;
+let commentary;
 
 //Play a single round of rock paper scissors.
 //Compare player and computer's selection
 //Determine winner
 function playRound(playerSelection, computerSelection) {
     computerSelection = getComputerChoice();
+    
     console.log(`The computer plays ${computerSelection}.`);
 
     switch(true) {
 
         case (playerSelection === 'rock' && computerSelection === 'rock'):
-        return 'It\'s a draw.';
+        commentary = 'It\'s a draw.';
+        return;
 
         case (playerSelection === 'rock' && computerSelection === 'paper'):
-        return 'Paper wraps up Rock, snatching the victory from the jaws of defeat! Humanity loses this round!';
+        commentary = 'Paper wraps up Rock, snatching the victory from the jaws of defeat! Humanity loses this round!';
+        return ++computerScore;
 
         case (playerSelection === 'rock' && computerSelection === 'scissors'):
-        return 'Rock smashes the shit out of scissors til it\'s bent out of shape. Humanity prevails this round!';
+        commentary = 'Rock smashes the shit out of scissors til it\'s bent out of shape. Humanity prevails this round!'
+        return ++playerScore;
 
         case (playerSelection === 'scissors' && computerSelection === 'scissors'):
-        return 'It\'s a draw.';
+        commentary = 'It\'s a draw.';
+        return;
         
         case (playerSelection === 'scissors' && computerSelection === 'rock'):
-        return 'Rock smashes the shit out of scissors til it\'s bent out of shape. Humanity loses this round!';
+        commentary = 'Rock smashes the shit out of scissors til it\'s bent out of shape. Humanity loses this round!';
+        return ++computerScore;
 
         case (playerSelection === 'scissors' && computerSelection === 'paper'):
-        return 'Scissors slices through paper and creates confetti. Humanity prevails this round!';
+        commentary = 'Scissors slices through paper and creates confetti. Humanity prevails this round!'
+        return ++playerScore;
 
         case (playerSelection === 'paper' && computerSelection === 'paper'):
-        return 'It\'s a draw.';
+        commentary = 'It\'s a draw.';
+        return;
 
         case (playerSelection === 'paper' && computerSelection === 'rock'):
-        return 'Paper wraps up Rock, snatching the victory from the jaws of defeat! Humanity prevails this round!';
+        commentary = 'Paper wraps up Rock, snatching the victory from the jaws of defeat! Humanity prevails this round!';
+        return ++playerScore;
 
         case (playerSelection === 'paper' && computerSelection === 'scissors'):
-        return 'Scissors slices through paper and creates confetti. Humanity loses this round!';
+        console.log('Scissors slices through paper and creates confetti. Humanity loses this round!');
+        return ++computerScore;
 
     }
 }
@@ -81,12 +92,22 @@ console.log(`And the players reveal their moves - Rock...Paper...Scissors!`);
 //Play a game of 5 rounds
 function game(playerSelection, computerSelection) {
     for (let i = 0; i < 5; i++) {
-        console.log(`Round ${i + 1}: `);
+
+        console.log(`——————————————————————Round ${i + 1}: ——————————————————————`);
 
         console.log(`You play ${playerSelection}.`);
         
-        console.log(playRound(playerSelection, computerSelection));
-        // console.log(`Round ${i + 1} winner: `);
+        playRound(playerSelection, computerSelection);
+
+        console.log(commentary);
+
+        console.log(`Score \b You:${playerScore} Computer:${computerScore}`);
+    }
+
+    if (playerScore > computerScore) {
+        console.log(`You win!`);
+    } else {
+        console.log(`You lose!`);
     }
 }
 
