@@ -30,6 +30,7 @@ function getComputerChoice() {
     console.log(computerChoice);
 }
 
+let playerSelection;
 let computerSelection;
 let playerScore = 0;
 let computerScore = 0;
@@ -84,7 +85,11 @@ function playRound(playerSelection, computerSelection) {
     }
 }
 
-const playerSelection = 'rock';
+function getPlayerChoice() {
+    return playerChoice = (prompt('Make a choice').toLowerCase());
+    console.log(playerChoice);
+}
+
 
 
 console.log(`And the players reveal their moves - Rock...Paper...Scissors!`);
@@ -94,13 +99,13 @@ function game(playerSelection, computerSelection) {
     for (let i = 0; i < 5; i++) {
 
         console.log(`——————————————————————Round ${i + 1}: ——————————————————————`);
-
+    
+        playerSelection = getPlayerChoice(); //Prompt user to type in choice
         console.log(`You play ${playerSelection}.`);
         
-        playRound(playerSelection, computerSelection);
-
-        console.log(commentary);
-
+        
+        playRound(playerSelection, computerSelection); //Play a round
+        console.log(commentary); //Print outcome
         console.log(`Score \b You:${playerScore} Computer:${computerScore}`);
     }
 
