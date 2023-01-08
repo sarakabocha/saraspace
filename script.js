@@ -5,11 +5,19 @@
 //If 0.33 < n ≤ 0.66 => paper
 //If 0.66 < n ≤ 1 => scissors
 
-const resultText = document.querySelector('p');
 
-let playerChoice;
+const selectionText = document.createElement('p');
+const resultText = document.createElement('p');
+const score = document.createElement('p');
+const outcome = document.createElement('p');
+container.appendChild(selectionText);
+container.appendChild(resultText);
+container.appendChild(score);
+container.appendChild(outcome);
+
 let computerChoice;
 
+// Get computer choice based on random number
 function getComputerChoice() {
     let n = Math.random()
 
@@ -17,7 +25,6 @@ function getComputerChoice() {
 
         case n <= 0.33:
         return computerChoice = 'rock'
-
 
         case n <= 0.66:
         return computerChoice = 'paper'
@@ -36,13 +43,13 @@ let playerScore = 0;
 let computerScore = 0;
 let commentary;
 
-//Play a single round of rock paper scissors.
-//Compare player and computer's selection
-//Determine winner
+// Play a single round of rock paper scissors.
+// Compare player and computer's selection
+// Determine winner and update score
 function playRound(playerSelection, computerSelection) {
     computerSelection = getComputerChoice();
-    
-    console.log(`The computer plays ${computerSelection}.`);
+    selectionText.textContent = `You play ${playerSelection}. The computer plays ${computerSelection}.`;
+    resultText.textContent = '';
 
     switch(true) {
 
@@ -79,41 +86,69 @@ function playRound(playerSelection, computerSelection) {
         return ++playerScore;
 
         case (playerSelection === 'paper' && computerSelection === 'scissors'):
-        console.log('Scissors slices through paper and creates confetti. Humanity loses this round!');
+        commentary = 'Scissors slices through paper and creates confetti. Humanity loses this round!';
         return ++computerScore;
 
     }
-}
-
-function getPlayerChoice() {
-    return playerChoice = (prompt('Make a choice').toLowerCase());
-    console.log(playerChoice);
 }
 
 
 
 console.log(`And the players reveal their moves - Rock...Paper...Scissors!`);
 
-//Play a game of 5 rounds
-function game(playerSelection, computerSelection) {
-    for (let i = 0; i < 5; i++) {
+// Create rps buttons
+const buttons = document.querySelectorAll('button');
 
-        console.log(`——————————————————————Round ${i + 1}: ——————————————————————`);
+buttons.forEach((button) => {
     
-        playerSelection = getPlayerChoice(); //Prompt user to type in choice
-        console.log(`You play ${playerSelection}.`);
-        
-        
-        playRound(playerSelection, computerSelection); //Play a round
-        console.log(commentary); //Print outcome
-        console.log(`Score \b You:${playerScore} Computer:${computerScore}`);
-    }
+    button.addEventListener('click', () => {
+        game(button.id, computerSelection); // Run game with button's id 
+        scoreCheck(); // Run score-keeping
+    });
+});
 
-    if (playerScore > computerScore) {
-        console.log(`You win!`);
-    } else {
-        console.log(`You lose!`);
-    }
+
+// Play a game
+function game(playerSelection, computerSelection) {
+        
+        playRound(playerSelection, computerSelection); // Play a round
+
+        resultText.textContent = commentary; // Print outcome
+
+        score.textContent = `Score \b You:${playerScore} Computer:${computerScore}`;
+
 }
 
-console.log(game(playerSelection, computerSelection));
+// Create a button that appears when game is over and resets game
+const resetButton = document.createElement('button');
+resetButton.innerText = 'Start over';
+resetButton.addEventListener('click', resetGame());
+
+function scoreCheck() {
+    if (playerScore === 2 || computerScore === 2) {
+
+        // Disable rps buttons when game over
+        buttons.forEach((button) => {
+            button.disabled = true;
+        })
+
+        // Display game outcome
+        if (playerScore > computerScore) {
+            outcome.textContent = `You win!`;
+        } else {
+            outcome.textContent = `You lose!`;
+        }
+
+        // Display Start over button
+        container.appendChild(resetButton);
+        
+    } else outcome.textContent = '';
+}
+
+// Start over function
+function resetGame() {
+    selectionText.textContent = '';
+    resultText.textContent = '';
+    score.textContent = '';
+    outcome.textContent = '';
+}
