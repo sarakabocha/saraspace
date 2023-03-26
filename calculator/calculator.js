@@ -3,6 +3,7 @@ const buttons = document.querySelectorAll("button");
 const numbers = document.querySelectorAll(".numbers button");
 
 const operators = document.querySelectorAll(".operators button");
+const equals = document.querySelectorAll(".equals button");
 
 const display = document.querySelector(".display");
 
@@ -51,6 +52,13 @@ operators.forEach((operator) => {
   });
 });
 
+// Track
+equals.forEach((equal) => {
+  equal.addEventListener("click", () => {
+    storeNumber(equal.id, equal.parentElement.className);
+  });
+});
+
 let operatorClicked = false;
 let secondNumber = display.textContent;
 let firstNumber;
@@ -65,7 +73,7 @@ function storeNumber(input, className) {
   if (className === "numbers") {
     if (secondNumber === "hello" || operatorClicked) {
       secondNumber = input;
-      operatorClicked = false;
+      // operatorClicked = false;
     } else {
       secondNumber += input;
     }
@@ -81,19 +89,23 @@ function storeNumber(input, className) {
     } else if (input === "/") {
       selectedOperator = divide;
     }
-    operatorClicked = true;
+    // operatorClicked = true;
 
     if (firstNumber && secondOperator && secondNumber) {
       secondNumber = operate(secondOperator, +firstNumber, +secondNumber);
       displayResult(secondNumber);
 
-      operatorClicked = false;
-    } else {
-      console.log(`storing a value of ${firstNumber}`);
+      // operatorClicked = false;
     }
+
+    // Whenever an operator is clicked, we pass the value from secondNumber to firstNumber, and store the selected operation until the next input is selected
     firstNumber = secondNumber;
     secondNumber = "";
     secondOperator = selectedOperator;
+  } else if (className === "equals") {
+    console.log(`You pressed equals. Storing a value of ${firstNumber}`);
+    secondNumber = firstNumber;
+    selectedOperator = "";
   }
 
   console.log(`your new secondNumber is ${secondNumber}`);

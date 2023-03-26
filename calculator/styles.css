@@ -1,5 +1,5 @@
 * {
-  border: none;
+  border: 1px black;
   font-size: 1.6rem;
   font-family: system-ui, "Open Sans", "Helvetica Neue", sans-serif;
 }
@@ -8,6 +8,7 @@
   max-width: 1000px;
   margin: auto;
   height: 50%;
+  border: 1px black;
 }
 
 .display {
