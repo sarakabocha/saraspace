@@ -1,5 +1,9 @@
 /* TODO
 - Add keyboard support
+- Add decimal
+- Add backspace button
+- Add a secondary display
+
 - Refactor storeNumber function: The storeNumber function is currently doing too many things. It would be better to break it up into smaller functions that have clear and specific purposes. For example, you could have a function that handles number input, another for operator input, and another for equals input.
 
 */
@@ -13,6 +17,7 @@ const equals = document.querySelector(".equals button");
 const clear = document.querySelector("#clear");
 
 const display = document.querySelector(".display");
+const paperTape = document.querySelector(".display-tape");
 
 // Every time a button is clicked, fire off the display function
 
@@ -60,7 +65,40 @@ operators.forEach((operator) => {
 });
 
 equals.addEventListener("click", () => {
-  storeNumber(equals.id, equals.parentElement.className);
+  calculateResult();
+});
+
+// Track keyboard
+window.addEventListener("keydown", function (event) {
+  console.log(event.key);
+  switch (event.key) {
+    case "+":
+    case "-":
+    case "*":
+    case "/":
+    case ".":
+      // The key pressed is a mathematical operator or a decimal point
+      storeNumber(event.key, "operators");
+      break;
+
+    // The key pressed is the equals sign or Enter key
+    case "=":
+    case "Enter":
+      calculateResult();
+      break;
+
+    // The key pressed is the c key
+    case "c":
+      clearResult();
+      break;
+
+    default:
+      if (!isNaN(event.key)) {
+        // The key pressed is a number
+        storeNumber(event.key, "numbers");
+      }
+      break;
+  }
 });
 
 let operatorClicked = false;
@@ -68,17 +106,23 @@ let secondNumber = display.textContent;
 let firstNumber;
 let storedOperator; //keeps track of the previously selected operator
 let selectedOperator; //keeps track of the currently selected operator
+let symbol;
+
+function clearResult() {
+  firstNumber = "";
+  secondNumber = "";
+  storedOperator = "";
+  displayResult(`hello`);
+  console.log(`you pressed clear`);
+}
+
+clear.addEventListener("click", () => {
+  clearResult();
+});
 
 // This function stores button clicks into variables and calls the operate function when an operator is clicked
 function storeNumber(input, className) {
   // If number is selected, build the number as a string
-  clear.addEventListener("click", () => {
-    firstNumber = "";
-    secondNumber = "";
-    storedOperator = "";
-    displayResult(`hello`);
-    console.log(`you pressed clear}`);
-  });
 
   // Store the number
 
@@ -92,6 +136,8 @@ function storeNumber(input, className) {
 
     // If an operator was pressed, run the code
   } else if (className === "operators") {
+    symbol = input;
+
     if (input === "+") {
       selectedOperator = add;
     } else if (input === "-") {
@@ -102,8 +148,9 @@ function storeNumber(input, className) {
       selectedOperator = divide;
     }
 
-    // We run a check to see if an operator was previously stored; if so, then the previous operation is run and its result is displayed. The currently selected operator is stored in selectedOperator.
+    // We check if an operator was previously stored; if so, then the previous operation is run and its result is displayed. The currently selected operator is stored in selectedOperator.
     if (firstNumber && storedOperator && secondNumber) {
+      displayTape(firstNumber, symbol, secondNumber);
       secondNumber = operate(storedOperator, +firstNumber, +secondNumber);
       displayResult(secondNumber);
     }
@@ -112,34 +159,37 @@ function storeNumber(input, className) {
     firstNumber = secondNumber;
     secondNumber = "";
     storedOperator = selectedOperator;
-  } else if (className === "equals") {
-    // Whenever equals is clicked, the operation is performed with the stored operator (same as above), but the first number and stored operator are reset.
-    if (firstNumber && storedOperator && secondNumber) {
-      secondNumber = operate(storedOperator, +firstNumber, +secondNumber);
-      displayResult(secondNumber);
-
-      // The firstNumber and secondOperator variables are reset to empty strings after the calculation is performed.
-      firstNumber = "";
-      storedOperator = "";
-    }
-
-    console.log(`your new secondNumber is ${secondNumber}`);
-    console.log(`your new firstNumber is ${firstNumber}`);
-    console.log(`your next operation is ${storedOperator}`);
-    return secondNumber;
-
-    //   // Clear all
-    // } else if (className === "clear") {
-    //   firstNumber = "";
-    //   secondNumber = "";
-    //   storedOperator = "";
-    //   displayResult(`hello`);
   }
+}
 
-  // display values of the pressed buttons
-  function displayResult(text) {
-    return (display.textContent = `${text}`);
+function calculateResult() {
+  // Whenever equals is clicked, the operation is performed with the stored operator (same as above), but the first number and stored operator are reset.
+  if (firstNumber && storedOperator && secondNumber) {
+    displayTape(firstNumber, symbol, secondNumber);
+    secondNumber = operate(storedOperator, +firstNumber, +secondNumber);
+    displayResult(secondNumber);
+
+    // The firstNumber and secondOperator variables are reset to empty strings after the calculation is performed.
+    firstNumber = "";
+    storedOperator = "";
   }
+  console.log(`your new secondNumber is ${secondNumber}`);
+  console.log(`your new firstNumber is ${firstNumber}`);
+  console.log(`your next operation is ${storedOperator}`);
+  return secondNumber;
+}
+
+// display values of the pressed buttons
+function displayResult(text) {
+  return (display.textContent = `${text}`);
+}
+
+// display values of previously pressed buttons
+function displayTape(x, operator, y) {
+  console.log(`x is: ${x}`);
+  console.log(`operator is: ${operator}`);
+  console.log(`y is: ${y}`);
+  return (paperTape.textContent = `${x}${operator}${y}`);
 }
 
 /* Explanation

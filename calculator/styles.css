@@ -28,6 +28,17 @@
   background-color: white;
   border-bottom: 1px black solid;
 }
+.display-tape {
+  box-sizing: border-box;
+  display: flex;
+
+  justify-content: end;
+  align-items: end;
+
+  padding: 20px;
+
+  font-size: 0.8rem;
+}
 
 button {
   height: 120px;
