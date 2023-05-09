@@ -113,6 +113,7 @@ function clearResult() {
   secondNumber = "";
   storedOperator = "";
   displayResult(`hello`);
+  displayTape("hey", "", "");
   console.log(`you pressed clear`);
 }
 
